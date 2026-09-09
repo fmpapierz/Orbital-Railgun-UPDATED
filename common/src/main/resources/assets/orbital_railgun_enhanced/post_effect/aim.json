@@ -1,0 +1,107 @@
+{
+  "targets": {
+    "ore_aim": {}
+  },
+  "passes": [
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "orbital_railgun_enhanced:post/gui",
+      "inputs": [
+        {
+          "sampler_name": "Diffuse",
+          "target": "minecraft:main"
+        },
+        {
+          "sampler_name": "Depth",
+          "target": "minecraft:main",
+          "use_depth_buffer": true
+        }
+      ],
+      "output": "ore_aim",
+      "uniforms": {
+        "OreData": [
+          {
+            "type": "matrix4x4",
+            "value": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1
+            ]
+          },
+          {
+            "type": "matrix4x4",
+            "value": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1
+            ]
+          },
+          {
+            "type": "vec4",
+            "value": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "type": "vec4",
+            "value": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "type": "vec4",
+            "value": [
+              0,
+              1,
+              1,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "orbital_railgun_enhanced:post/copy",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "ore_aim"
+        }
+      ],
+      "output": "minecraft:main"
+    }
+  ]
+}

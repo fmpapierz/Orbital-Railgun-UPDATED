@@ -1,0 +1,192 @@
+{
+  "targets": {
+    "ore_strike": {},
+    "ore_chromatic": {}
+  },
+  "passes": [
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "orbital_railgun_enhanced:post/strike",
+      "inputs": [
+        {
+          "sampler_name": "Diffuse",
+          "target": "minecraft:main"
+        },
+        {
+          "sampler_name": "Depth",
+          "target": "minecraft:main",
+          "use_depth_buffer": true
+        }
+      ],
+      "output": "ore_strike",
+      "uniforms": {
+        "OreData": [
+          {
+            "type": "matrix4x4",
+            "value": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1
+            ]
+          },
+          {
+            "type": "matrix4x4",
+            "value": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1
+            ]
+          },
+          {
+            "type": "vec4",
+            "value": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "type": "vec4",
+            "value": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "type": "vec4",
+            "value": [
+              0,
+              1,
+              1,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "orbital_railgun_enhanced:post/chromatic_abjuration",
+      "inputs": [
+        {
+          "sampler_name": "Diffuse",
+          "target": "ore_strike"
+        }
+      ],
+      "output": "ore_chromatic",
+      "uniforms": {
+        "OreData": [
+          {
+            "type": "matrix4x4",
+            "value": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1
+            ]
+          },
+          {
+            "type": "matrix4x4",
+            "value": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1
+            ]
+          },
+          {
+            "type": "vec4",
+            "value": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "type": "vec4",
+            "value": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "type": "vec4",
+            "value": [
+              0,
+              1,
+              1,
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "orbital_railgun_enhanced:post/copy",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "ore_chromatic"
+        }
+      ],
+      "output": "minecraft:main"
+    }
+  ]
+}

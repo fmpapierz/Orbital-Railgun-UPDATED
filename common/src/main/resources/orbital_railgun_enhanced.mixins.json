@@ -1,0 +1,23 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "io.github.kingironman2011.orbital_railgun_enhanced.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ServerMixin",
+    "CommandsMixin",
+    "ZoomMixin"
+  ],
+  "client": [
+    "ClientMixin",
+    "HudMixin",
+    "PostChainAccessor",
+    "PostPassAccessor",
+    "GameRendererMixin",
+    "LevelExtractorMixin",
+    "PauseScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

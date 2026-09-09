@@ -1,0 +1,15 @@
+plugins { id 'net.neoforged.moddev' }
+sourceSets.main {
+    java.srcDir project(':common').file('src/main/java')
+    resources.srcDir project(':common').file('src/main/resources')
+}
+neoForge {
+    version = neo_version
+    runs {
+        client { client() }
+        server { server(); programArgument '--nogui' }
+    }
+    mods {
+        orbital_railgun_enhanced { sourceSet sourceSets.main }
+    }
+}

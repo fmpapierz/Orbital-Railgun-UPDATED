@@ -1,0 +1,33 @@
+plugins { id 'net.minecraftforge.gradle' }
+sourceSets.main {
+    java.srcDir project(':common').file('src/main/java')
+    resources.srcDir project(':common').file('src/main/resources')
+}
+minecraft {
+    runs {
+        configureEach { workingDir = layout.projectDirectory.dir('run'); args '--mixin.config=orbital_railgun_enhanced.mixins.json' }
+        register('client')
+        register('server') { args '--nogui' }
+    }
+}
+repositories {
+    minecraft.mavenizer(it)
+    maven fg.forgeMaven
+    maven fg.minecraftLibsMaven
+    mavenCentral()
+}
+dependencies {
+    implementation minecraft.dependency("net.minecraftforge:forge:${forge_version}")
+}
+
+jar { manifest { attributes 'MixinConfigs': 'orbital_railgun_enhanced.mixins.json' } }
+
+// Keep classes beside metadata for Forge's module discovery in development.
+// Root Java configuration precedes ForgeGradle. Merge outputs explicitly so
+// ProcessResources cannot delete compiled classes on an incremental rebuild.
+tasks.named('compileJava') { destinationDirectory = layout.buildDirectory.dir('classes/java/main') }
+tasks.named('processResources') {
+    dependsOn tasks.named('compileJava')
+    from(tasks.named('compileJava').flatMap { it.destinationDirectory })
+}
+tasks.withType(Jar).configureEach { duplicatesStrategy = DuplicatesStrategy.EXCLUDE }

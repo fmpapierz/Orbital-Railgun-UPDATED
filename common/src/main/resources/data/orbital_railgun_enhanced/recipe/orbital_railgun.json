@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "minecraft:netherite_block",
+    "N": "minecraft:netherite_ingot",
+    "S": "minecraft:nether_star",
+    "R": "minecraft:redstone",
+    "E": "minecraft:emerald",
+    "L": "minecraft:lapis_lazuli",
+    "G": "minecraft:glass_pane"
+  },
+  "pattern": [
+    "GNE",
+    "SBN",
+    "LR "
+  ],
+  "result": {
+    "count": 1,
+    "id": "orbital_railgun_enhanced:orbital_railgun"
+  }
+}

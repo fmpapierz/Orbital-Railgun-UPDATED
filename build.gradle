@@ -1,0 +1,66 @@
+plugins {
+    id 'base'
+    id 'net.fabricmc.fabric-loom' version '1.17.20' apply false
+    id 'net.neoforged.moddev' version '2.0.146' apply false
+    id 'net.minecraftforge.gradle' version '7.0.36' apply false
+}
+subprojects {
+    apply plugin: 'java-library'
+    group = rootProject.maven_group
+    version = rootProject.mod_version
+    base.archivesName = "orbital-railgun-${project.name}"
+    java {
+        toolchain.languageVersion = JavaLanguageVersion.of(25)
+        withSourcesJar()
+    }
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+        options.release = 25
+    }
+    tasks.withType(ProcessResources).configureEach {
+        inputs.property 'version', project.version
+        filesMatching(['fabric.mod.json', 'META-INF/mods.toml', 'META-INF/neoforge.mods.toml']) {
+            expand version: project.version
+        }
+    }
+    tasks.withType(Jar).configureEach {
+        from(rootProject.file('LICENSE'))
+        from(rootProject.file('LICENSE-original.txt'))
+        from(rootProject.file('NOTICE.md'))
+    }
+}
+tasks.register('collectJars', Copy) {
+    dependsOn ':fabric:build', ':neoforge:build', ':forge:build'
+    from(subprojects.findAll { it.name != 'common' }.collect { it.layout.buildDirectory.dir('libs') }) {
+        exclude '*-sources.jar'
+    }
+    into layout.buildDirectory.dir('libs')
+}
+build.dependsOn 'collectJars', ':common:check'
+
+// Smoke sources are only compiled for explicit development runs, never packaged.
+subprojects {
+    if (rootProject.hasProperty('smokeTest')) {
+        sourceSets.main.java.srcDir rootProject.file('common/src/smoke/java')
+    }
+    tasks.withType(ProcessResources).configureEach {
+        inputs.property 'smokeTest', rootProject.hasProperty('smokeTest')
+        doLast {
+            if (rootProject.hasProperty('smokeTest')) {
+                def mixins = new File(destinationDir, 'orbital_railgun_enhanced.mixins.json')
+                if (mixins.exists()) {
+                    def json = new groovy.json.JsonSlurper().parse(mixins)
+                    json.client += 'SmokeMixin'
+                    json.mixins += 'SmokeServerMixin'
+                    mixins.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
+                }
+            }
+        }
+    }
+    tasks.withType(Jar).configureEach {
+        exclude '**/smoke/**', '**/SmokeMixin*', '**/SmokeServerMixin*'
+        doFirst {
+            if (rootProject.hasProperty('smokeTest')) throw new GradleException('Use smokeTest only with runClient/runServer. Build release jars without -PsmokeTest.')
+        }
+    }
+}

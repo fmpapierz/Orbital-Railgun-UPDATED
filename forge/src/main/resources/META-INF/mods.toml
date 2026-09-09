@@ -1,0 +1,24 @@
+modLoader="javafml"
+loaderVersion="[65,)"
+license="MIT"
+[[mods]]
+modId="orbital_railgun_enhanced"
+version="${version}"
+displayName="Orbital Railgun Enhanced"
+authors="Mishkis, KingIronMan2011"
+logoFile="assets/orbital_railgun_enhanced/icon.png"
+description="Orbital Railgun with enhanced sounds, effects and controls for Minecraft 26.2."
+[[mixins]]
+config="orbital_railgun_enhanced.mixins.json"
+[[dependencies.orbital_railgun_enhanced]]
+modId="minecraft"
+mandatory=true
+versionRange="[26.2]"
+ordering="NONE"
+side="BOTH"
+[[dependencies.orbital_railgun_enhanced]]
+modId="forge"
+mandatory=true
+versionRange="[65.1.3,)"
+ordering="NONE"
+side="BOTH"
