@@ -1,4 +1,4 @@
-name: Build 26.2
+name: Build 26.3
 on:
   push:
   pull_request:
@@ -19,5 +19,5 @@ jobs:
       - run: ./gradlew clean build --no-daemon
       - uses: actions/upload-artifact@v4
         with:
-          name: orbital-railgun-26.2
+          name: orbital-railgun-26.3
           path: build/libs/*.jar

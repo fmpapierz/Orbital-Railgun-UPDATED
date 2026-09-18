@@ -7,4 +7,10 @@ pluginManagement {
     }
 }
 rootProject.name = 'orbital-railgun'
-include 'common', 'fabric', 'neoforge', 'forge'
+include 'common', 'fabric', 'neoforge', 'quilt'
+// Do not resolve or build Forge against the wrong Minecraft version.
+if (providers.gradleProperty('forge_version').getOrElse('')) {
+    include 'forge'
+} else if (gradle.startParameter.taskNames.any { it.startsWith(':forge:') || it.startsWith('forge:') }) {
+    throw new GradleException('Forge has no published Minecraft 26.3 release. The adapter is preserved in forge/. Set forge_version only after a matching release is available, then compile and test it.')
+}

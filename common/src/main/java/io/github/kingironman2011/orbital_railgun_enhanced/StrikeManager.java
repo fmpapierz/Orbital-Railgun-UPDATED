@@ -123,7 +123,7 @@ public final class StrikeManager {
           Vec3 delta = Vec3.atCenterOf(s.pos).subtract(entity.position());
           if (delta.lengthSqr() > config.getPullRadius() * config.getPullRadius()) continue;
           entity.push(delta.normalize().scale(StrikeMath.pull(delta.length(), age)));
-          entity.hurtMarked = true;
+          entity.syncVelocity = true;
         }
       }
       if (age >= StrikeMath.IMPACT_TICK && !s.impacted) {

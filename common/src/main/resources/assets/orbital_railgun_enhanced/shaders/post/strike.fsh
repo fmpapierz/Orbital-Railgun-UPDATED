@@ -1,4 +1,5 @@
 #version 330
+#extension GL_ARB_separate_shader_objects : require
 #define STEPS 800
 #define MIN_DIST 0.001
 #define MAX_DIST 2500.
@@ -26,9 +27,9 @@ layout(std140) uniform OreData {
 #define viewWidth TimeData.y
 #define viewHeight TimeData.z
 
-in vec2 texCoord;
+layout(location = 0) in vec2 texCoord;
 
-out vec4 fragColor;
+layout(location = 0) out vec4 fragColor;
 
 float smooth_min(float a, float b, float k) {
     float diff = a - b;

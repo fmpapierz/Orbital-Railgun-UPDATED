@@ -9,7 +9,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "orbital_railgun_enhanced:orbital_railgun"
+        "recipes": "orbital_railgun_enhanced:orbital_railgun"
       }
     },
     "unlock_instantly": {

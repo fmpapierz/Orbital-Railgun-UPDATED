@@ -1,7 +1,7 @@
 plugins {
     id 'base'
     id 'net.fabricmc.fabric-loom' version '1.17.20' apply false
-    id 'net.neoforged.moddev' version '2.0.146' apply false
+    id 'net.neoforged.moddev' version '2.0.147' apply false
     id 'net.minecraftforge.gradle' version '7.0.36' apply false
 }
 subprojects {
@@ -19,8 +19,11 @@ subprojects {
     }
     tasks.withType(ProcessResources).configureEach {
         inputs.property 'version', project.version
+        inputs.property 'forgeVersion', rootProject.forge_version
         filesMatching(['fabric.mod.json', 'META-INF/mods.toml', 'META-INF/neoforge.mods.toml']) {
-            expand version: project.version
+            expand version: project.version,
+                forge_api_version: rootProject.forge_version.tokenize('-').drop(1).join('-'),
+                forge_loader_major: rootProject.forge_version.tokenize('-').drop(1).join('-').tokenize('.').find()
         }
     }
     tasks.withType(Jar).configureEach {
@@ -29,11 +32,10 @@ subprojects {
         from(rootProject.file('NOTICE.md'))
     }
 }
-tasks.register('collectJars', Copy) {
-    dependsOn ':fabric:build', ':neoforge:build', ':forge:build'
-    from(subprojects.findAll { it.name != 'common' }.collect { it.layout.buildDirectory.dir('libs') }) {
-        exclude '*-sources.jar'
-    }
+tasks.register('collectJars', Sync) {
+    dependsOn ':fabric:build', ':neoforge:build', ':quilt:build'
+    if (rootProject.forge_version) dependsOn ':forge:build'
+    from(subprojects.findAll { it.name != 'common' }.collect { it.tasks.named('jar').flatMap { it.archiveFile } })
     into layout.buildDirectory.dir('libs')
 }
 build.dependsOn 'collectJars', ':common:check'

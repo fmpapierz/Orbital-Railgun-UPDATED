@@ -37,7 +37,8 @@ public final class FabricMod implements ModInitializer, Platform {
   }
 
   public String loader() {
-    return "Fabric";
+    return net.fabricmc.loader.api.FabricLoader.getInstance().isModLoaded("quilt_loader")
+        ? "Quilt" : "Fabric";
   }
 
   public void sendStrike(ServerPlayer player, StrikePayload payload) {

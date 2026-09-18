@@ -2,7 +2,7 @@ package io.github.kingironman2011.orbital_railgun_enhanced.mixin;
 
 import com.mojang.blaze3d.resource.CrossFrameResourcePool;
 import io.github.kingironman2011.orbital_railgun_enhanced.client.EffectsRenderer;
-import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.*;
@@ -20,7 +20,7 @@ public abstract class GameRendererMixin {
           @At(
               value = "INVOKE",
               target =
-                  "Lnet/minecraft/client/renderer/ProjectionMatrixBuffer;getBuffer(Lorg/joml/Matrix4f;)Lcom/mojang/blaze3d/buffers/GpuBufferSlice;"),
+                  "Lnet/minecraft/client/renderer/ProjectionMatrixBuffer;getBuffer(Lorg/joml/Matrix4f;)Lcom/mojang/renderpearl/api/buffers/GpuBufferSlice;"),
       index = 0)
   private Matrix4f ore$projection(Matrix4f projection) {
     io.github.kingironman2011.orbital_railgun_enhanced.client.CameraShake.apply(
@@ -32,15 +32,10 @@ public abstract class GameRendererMixin {
     return projection;
   }
 
-  @Inject(
-      method = "renderLevel",
-      at =
-          @At(
-              value = "INVOKE",
-              target =
-                  "Lcom/mojang/blaze3d/systems/CommandEncoder;clearDepthTexture(Lcom/mojang/blaze3d/textures/GpuTexture;D)V"))
-  private void ore$effects(DeltaTracker deltaTracker, CallbackInfo ci) {
-    // The world depth is discarded here for the hand. Post processing must precede it.
-    EffectsRenderer.render(resourcePool, deltaTracker.getGameTimeDeltaPartialTick(false));
+  @Inject(method = "render3dHud", at = @At("HEAD"))
+  private void ore$effects(CallbackInfo ci) {
+    // 26.3 renders the hand in render3dHud. Process terrain before its depth is cleared.
+    EffectsRenderer.render(
+        resourcePool, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(false));
   }
 }

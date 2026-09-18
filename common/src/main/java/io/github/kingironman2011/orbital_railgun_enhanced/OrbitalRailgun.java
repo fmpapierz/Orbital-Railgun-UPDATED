@@ -30,6 +30,6 @@ public final class OrbitalRailgun {
   public static void init(Platform bridge) {
     platform = bridge;
     io.github.kingironman2011.orbital_railgun_enhanced.config.ServerConfig.INSTANCE.loadConfig();
-    LOGGER.info("Orbital Railgun Enhanced 26.2 initialized on {}", bridge.loader());
+    LOGGER.info("Orbital Railgun Enhanced 26.3 initialized on {}", bridge.loader());
   }
 }

@@ -1,4 +1,4 @@
-This Minecraft 26.2 multiloader port is derived from:
+This Minecraft 26.3 multiloader port is derived from:
 
 * Mishkis/orbital-railgun, the original Orbital Railgun (MIT).
 * KingIronMan2011/orbital-railgun-enhanced, revision ac99f3c (MIT).

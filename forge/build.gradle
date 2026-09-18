@@ -1,4 +1,8 @@
-plugins { id 'net.minecraftforge.gradle' }
+// settings.gradle includes this preserved adapter only when forge_version is set.
+if (!rootProject.forge_version.startsWith("${rootProject.minecraft_version}-")) {
+    throw new GradleException('forge_version must target the configured Minecraft version')
+}
+apply plugin: 'net.minecraftforge.gradle'
 sourceSets.main {
     java.srcDir project(':common').file('src/main/java')
     resources.srcDir project(':common').file('src/main/resources')

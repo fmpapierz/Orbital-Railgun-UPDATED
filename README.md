@@ -1,16 +1,19 @@
-# Orbital Railgun Enhanced — Minecraft 26.2
+# Orbital Railgun Enhanced — Minecraft 26.3
 
 A common-code port of [Mishkis/orbital-railgun](https://github.com/Mishkis/orbital-railgun) and [KingIronMan2011/orbital-railgun-enhanced](https://github.com/KingIronMan2011/orbital-railgun-enhanced), retaining their MIT notices and original assets.
 
 ## Install
 
-Use **one** jar matching your loader, on the client and server. Minecraft **26.2** and **Java 25** are required.
+Use **one** jar matching your loader, on the client and server. Minecraft **26.3** and **Java 25** are required.
 
 | Loader | Tested version | Required additional mods | Jar in `build/libs/` |
 | --- | --- | --- | --- |
-| Fabric | 0.19.5 | Fabric API 0.159.0+26.2 | `orbital-railgun-fabric-2.0.3+26.2.jar` |
-| NeoForge | 26.2.0.82 | None | `orbital-railgun-neoforge-2.0.3+26.2.jar` |
-| Forge | 65.1.3 | None | `orbital-railgun-forge-2.0.3+26.2.jar` |
+| Fabric | 0.19.5 | Fabric API 0.160.7+26.3 | `orbital-railgun-fabric-2.1.0+26.3.jar` |
+| NeoForge | 26.3.0.4-beta | None | `orbital-railgun-neoforge-2.1.0+26.3.jar` |
+| Quilt | 0.31.0-beta.4 | Fabric API 0.160.7+26.3 | `orbital-railgun-quilt-2.1.0+26.3.jar` |
+| Forge | Awaiting upstream 26.3 release | — | No jar available yet |
+
+**Forge is not yet available for Minecraft 26.3.** Its adapter is retained, but excluded from the default build until a matching version is published. See [porting notes](docs/PORTING.md). NeoForge and Quilt currently use beta loader releases.
 
 GeckoLib, owo-lib and Satin are **optional**. The mod uses Minecraft's item models, configuration screen, sound engine and post-processing API. Install compatible versions of those libraries if other mods need them. Do not install an old Minecraft version's library jar.
 
@@ -55,13 +58,13 @@ Set `JAVA_HOME` to a JDK 25 installation, then run:
 .\gradlew.bat clean build
 ```
 
-On this machine, the JDK is `C:\Program Files\Zulu\zulu-25`. The configured system `JAVA_HOME` may need overriding in the current shell.
+Make sure `JAVA_HOME` points to JDK 25 in the shell used to run Gradle.
 
-The `common` module owns gameplay, rendering, assets and tests. `fabric`, `neoforge`, and `forge` provide their loaders' registry and networking adapters. Each output jar contains the common code. `legacy/` preserves the previous port's sources for comparison; Gradle does not compile it.
+The `common` module owns gameplay, rendering, assets and tests. `fabric`, `neoforge`, and `quilt` produce installable jars containing the common code. Quilt shares the Fabric registry/network adapter. The preserved `forge` adapter is disabled pending an upstream 26.3 release.
 
-Development clients: `./gradlew :fabric:runClient`, `:neoforge:runClient`, or `:forge:runClient`.
+Development clients: `./gradlew :fabric:runClient`, `:neoforge:runClient`, or `:quilt:runClient`.
 
-For an automated real-client test, run `./scripts/Smoke-Test.ps1`. It creates disposable flat worlds, fires a railgun, checks range exit/reentry, verifies bedrock removal and the crater boundary, captures screenshots, then exits. Leave its test client controls alone while it runs. `-Loader fabric`, `neoforge`, or `forge` limits the run. Smoke code is opt-in and release packaging rejects `-PsmokeTest`.
+For an automated real-client test, run `./scripts/Smoke-Test.ps1`. It creates disposable flat worlds, fires a railgun, checks range exit/reentry, verifies bedrock removal and the crater boundary, captures screenshots, then exits. Leave its test client controls alone while it runs. `-Loader fabric`, `neoforge`, or `quilt` limits the run. Forge can be tested after enabling its module. Smoke code is opt-in and release packaging rejects `-PsmokeTest`.
 
 See [validation results](docs/VALIDATION.md) and [porting decisions](docs/PORTING.md).
 
@@ -69,4 +72,4 @@ See [validation results](docs/VALIDATION.md) and [porting decisions](docs/PORTIN
 
 Mishkis: original mod and assets. KingIronMan2011: enhanced fork. HyIsNoob: enhanced sound effects. MIT: [LICENSE](LICENSE), [original notice](LICENSE-original.txt), [NOTICE](NOTICE.md).
 
-The separate `Satin API/` repository contains an optional LGPL port experiment. It is not needed to build or run this mod and is not a drop-in replacement for every historical Satin API.
+The `legacy/` directory preserves older sources for reference and is excluded from the build.

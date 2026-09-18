@@ -1,6 +1,7 @@
 package io.github.kingironman2011.orbital_railgun_enhanced.client;
 
 import com.mojang.blaze3d.buffers.*;
+import com.mojang.renderpearl.api.buffers.GpuBuffer;
 import com.mojang.blaze3d.resource.GraphicsResourceAllocator;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.kingironman2011.orbital_railgun_enhanced.*;

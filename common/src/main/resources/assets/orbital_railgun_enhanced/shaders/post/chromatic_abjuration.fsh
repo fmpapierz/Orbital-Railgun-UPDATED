@@ -1,4 +1,5 @@
 #version 330
+#extension GL_ARB_separate_shader_objects : require
 
 uniform sampler2D DiffuseSampler;
 layout(std140) uniform OreData {
@@ -15,11 +16,11 @@ layout(std140) uniform OreData {
 #define viewWidth TimeData.y
 #define viewHeight TimeData.z
 
-in vec2 texCoord;
+layout(location = 0) in vec2 texCoord;
 
 
 
-out vec4 fragColor;
+layout(location = 0) out vec4 fragColor;
 
 vec2 rotate(vec2 p, float r) {
     return mat2(cos(r), -sin(r), sin(r), cos(r)) * p;

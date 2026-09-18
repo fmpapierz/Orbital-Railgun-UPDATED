@@ -1,64 +1,52 @@
-# Validation matrix
+# Minecraft 26.3 validation
 
-## 2.0.3 targeting and camera shake results
+Validated locally on 2026-09-17, Windows, Zulu JDK 25, NVIDIA RTX 4090, OpenGL.
 
-All three loaders passed integrated-world testing on September 8, 2026. Logs: `.porting/range-shake-final.log` (Fabric/NeoForge) and `.porting/range-shake-forge-final.log` (Forge).
-
-- Client and server raycasts found a block 480 blocks away at a 32-chunk render distance. The server accepted the shot and synchronized its exact target back to the client. The same block was outside the six-chunk test range.
-- The distant test fixture keeps its chunk loaded, waits for the client to receive it, and holds use before sending the shot. Early test iterations exposed fixture unloading and use/shot timing issues; the final suite passed with those preconditions established.
-- At impact, camera shake changed the projection. Disabling it or setting intensity to zero produced no change. Player position, yaw and pitch remained unchanged.
-- The existing settings, pull immunity, bedrock protection, configurable crater, range reentry and lighting fade checks also passed.
-- Ten unit tests passed. The separate publication copy also passed a clean three-loader build and release artifact audit.
-
-The new controls and distant targeting are shown in [impact-shake-settings.png](config-validation/impact-shake-settings.png) and [render-distance-target.png](config-validation/render-distance-target.png). This remains integrated-server coverage, not a dedicated multiplayer test.
-
-## 2.0.2 configuration and lighting regression results
-
-Fabric, NeoForge and Forge passed real-client integrated-world tests on September 8, 2026. Logs: `.porting/config-all.log` (Fabric) and `.porting/config-neo-forge.log` (NeoForge/Forge). An initial NeoForge test assumed bedrock destruction started enabled; the smoke harness now establishes its boolean preconditions and restores the starting flags afterward.
-
-- Actual numeric edit boxes and Apply buttons changed damage, effect range, crater radius, pull radius, cooldown and strike limit; server snapshots acknowledged every value. Particle and debug buttons also changed and restored correctly.
-- A shot fired with radius 12 retained that radius after the setting changed back. Actual block removal preserved the bedrock column 13 blocks from the target.
-- All five pull scenarios, both bedrock modes, range reentry, world loading and effect cleanup passed on every loader.
-- Screenshots at full strength, halfway through the fade, just before removal and after removal show the beam and scene lighting blending back to normal. Representative images are in [config-validation](config-validation/).
-- Eight unit tests passed, including expanded packet round trips, rejection of nonfinite/out-of-range values, configurable circle boundaries, and a monotonic smooth fade reaching zero before removal.
-
-The final `clean build` and release artifact audit passed for all three 2.0.2 jars. These checks do not add dedicated-server or non-operator multiplayer coverage beyond the limitations below.
-
-The three loaders were launched against Minecraft 26.2 with Java 25 and an RTX 4090. Each test created a disposable flat world and then exited after checking the server and client behavior.
-
-| Loader | Loader version | Result | Checks |
+| Loader | Version | Compile/package | Real client + integrated server |
 | --- | --- | --- | --- |
-| Fabric | 0.19.5 + Fabric API 0.159.0+26.2 | PASS (2.0.0) | world load, server validated shot, client packet, range leave/re-entry, bedrock removal, radius boundary, effect cleanup, settings screen |
-| NeoForge | 26.2.0.82 | PASS (2.0.0) | same checks |
-| Forge | 65.1.3 | PASS (2.0.0) | same checks |
+| Fabric | 0.19.5 / Fabric API 0.160.7+26.3 | PASS | PASS |
+| NeoForge | 26.3.0.4-beta | PASS | PASS |
+| Quilt | 0.31.0-beta.4 / Fabric API 0.160.7+26.3 | PASS | PASS |
+| Forge | No upstream 26.3 release | BLOCKED | Not run |
 
-The initial checks did not establish visual parity or verify entity damage. User testing found that the render pass sampled the hand depth buffer, obscuring terrain projection errors. The 2.0.1 regression suite captures the scope opening, aiming ring, strike phases, waves on raised terrain, and beam from two camera positions. It also clicks both server settings, verifies acknowledgements, checks creative/spectator/near/far survival pull and pull-off behavior, and exercises both bedrock settings against actual blocks. Results are recorded below after the runs complete.
+## Build and artifact checks
 
-The final release build was run after a clean, without smoke sources, and `scripts/Validate-Artifacts.ps1` confirmed the three jars contain their loader metadata, mixins, recipe, shaders, notices, and no smoke classes or smoke mixin names. The unit suite (`:common:test`) passed.
+- `gradlew.bat clean build`: successful.
+- All 10 existing JUnit tests pass: 4 payload/settings tests and 6 targeting/strike-math tests.
+- `scripts/Validate-Artifacts.ps1`: all three release jars pass. Common gameplay
+  classes, mixins, assets, recipe, metadata and license notices are present.
+  Smoke-test classes and mixin entries are absent.
+- Release jars and SHA-256 checksums are in `build/libs/`.
+- Explicit Forge tasks reject the unavailable dependency with an explanation.
+  Supplying a 26.2 Forge dependency is also rejected, preventing a mislabeled jar.
 
-Smoke logs from the latest runs are kept in the local `.porting/` workspace cache, which is ignored by Git. Run `scripts/Smoke-Test.ps1` to reproduce them; it takes roughly two minutes per loader because the impact is intentionally tested at the original 700-tick timing.
+## Gameplay checks
 
-The tests co-loaded GeckoLib 5.5.5 and Satin 4.0.0+26.2 on Fabric/NeoForge/Forge, and owo-lib 0.13.1+26.2 on Fabric. The railgun itself declares none of these as required dependencies. An Iris shaderpack and a Vulkan backend were not part of this validation matrix; the no-shader geometry fallback was tested.
+Each loader completed the full opt-in client smoke test and logged all 12 required
+completion markers. This exercises world creation, item registration, recipe
+loading, settings synchronization and permissions, shot networking, range exit
+and reentry, creative/spectator pull immunity, survival pull and its toggle,
+bedrock destruction and its toggle, crater radius, cleanup, camera shake, and a
+480-block target with 32-chunk render distance.
 
-## 2.0.1 visual and gameplay regression results
+Final successful logs contain no post-chain/shader compilation, mixin application,
+or registry-loading failures. Impact screenshots were visually inspected for all
+three loaders, along with Fabric's aiming view. Samples:
 
-All three clients passed on September 8, 2026. These are integrated-server tests; separate dedicated-server multiplayer and non-operator UI flows have not been exercised.
+| Loader | Aiming | Impact |
+| --- | --- | --- |
+| Fabric | [Aiming](visual-validation/fabric-aim.png) | [Impact](visual-validation/fabric-impact.png) |
+| NeoForge | [Aiming](visual-validation/neoforge-aim.png) | [Impact](visual-validation/neoforge-impact.png) |
+| Quilt | [Aiming](visual-validation/quilt-aim.png) | [Impact](visual-validation/quilt-impact.png) |
 
-| Check | Fabric | NeoForge | Forge |
-| --- | --- | --- | --- |
-| Scope opening line, rotating ring, transforming strike and terrain waves (screenshots) | Verified | Verified | Verified |
-| Creative pull displacement | 0 | 0 | 0 |
-| Spectator pull displacement | 0 | 0 | 0 |
-| Survival 80 blocks from strike, horizontal displacement | 0 | 0 | 0 |
-| Survival nearby, movement toward strike | 6.10 blocks | 6.02 blocks | 5.81 blocks |
-| Nearby survival with pull OFF, horizontal displacement | 0 | 0 | 0 |
-| Settings buttons and authoritative acknowledgements | PASS | PASS | PASS |
-| Bedrock OFF retains bedrock while adjacent stone clears | PASS | PASS | PASS |
-| Bedrock ON clears bedrock | PASS | PASS | PASS |
-| World load, shot synchronization, range reentry, crater boundary and cleanup | PASS | PASS | PASS |
+Logs are retained locally in `build/validation/`; full screenshots and disposable
+worlds are in each loader's `run/` directory. Repeat with
+`scripts/Smoke-Test.ps1`, or use `-Loader fabric`, `neoforge`, or `quilt`.
 
-Pull probes run for 25 ticks. Their coordinates avoid the stone pillars used to test projected waves. Earlier probe failures were caused by teleporting inside those pillars, which triggered Minecraft's collision correction; the checks were rerun in clear space. Every asynchronous check must complete before the final PASS marker.
+## Limits
 
-Logs: `.porting/visual-settings-fabric2.log`, `.porting/visual-settings-neoforge.log`, `.porting/visual-settings-forge.log`. The first successful Fabric run used the final gameplay/rendering code before the version-string and help-text update. Six unit tests passed, including settings-packet flag/permission round trips.
-
-Screenshots are preserved in [visual-validation](visual-validation/): [opening line](visual-validation/01a-opening-line.png), [aiming ring](visual-validation/01c-aim-ring.png), [strike transformation](visual-validation/02b-strike-ring.png), [terrain waves](visual-validation/06-terrain-waves.png), [settings](visual-validation/05-config.png), [beam before moving](visual-validation/09-beam-before-move.png), and [beam after moving](visual-validation/10-beam-after-move.png).
+Runtime tests used Gradle development clients and their integrated servers.
+Dedicated servers, remote multiplayer, Vulkan, other operating systems and
+third-party modpacks were not tested. NeoForge and Quilt versions are beta
+releases. Forge's preserved adapter still needs compilation and runtime testing
+when a Minecraft 26.3 release becomes available; see [porting notes](PORTING.md).
