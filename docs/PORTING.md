@@ -28,7 +28,9 @@ The original shader equations were moved to GLSL 330, std140 uniform blocks, nat
 
 Pull is restricted to a 24-block sphere around the fixed strike point, independent of sound range. Creative and spectator players are immune; survival players and other entities remain affected when enabled. `enablePull` and `destroyBedrock` default to true, persist in the server config, and apply immediately to ongoing strikes. Disabling bedrock destruction skips bedrock while still removing other blocks.
 
-Forge requires both pack metadata and a MixinConfigs manifest. Its development source output is explicitly merged through processResources so incremental builds retain both class files and resources. Mixin uses the JAVA_21 compatibility declaration accepted by all three loaders; Minecraft and the compiled code still require Java 25.
+Quilt has a dedicated adapter and artifact. It uses Quilt Loader's Fabric compatibility plugin with Fabric API because Quilted Fabric API has no 26.2 build. The Quilt development runs explicitly register the mod resources and Fabric API with Quilt Loader because Fabric Loom only emits Fabric Loader's discovery arguments.
+
+Forge requires both pack metadata and a MixinConfigs manifest. Its development source output is explicitly merged through processResources so incremental builds retain both class files and resources. Mixin uses the JAVA_21 compatibility declaration accepted by all four loaders; Minecraft and the compiled code still require Java 25.
 
 ## Upstream sources
 

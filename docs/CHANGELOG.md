@@ -1,3 +1,9 @@
+# 2.0.4+26.2
+
+- Added a dedicated Quilt Loader 0.31.0-beta.4 artifact and development client/server runs.
+- Added Quilt registry and networking entrypoints backed by Quilt's Fabric compatibility layer and Fabric API 0.159.0+26.2.
+- Extended artifact validation and smoke-test selection to all four loaders.
+
 # 2.0.3+26.2
 
 - Removed the vertical blue particle stream above the target.

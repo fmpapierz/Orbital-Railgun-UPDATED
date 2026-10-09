@@ -19,7 +19,7 @@ subprojects {
     }
     tasks.withType(ProcessResources).configureEach {
         inputs.property 'version', project.version
-        filesMatching(['fabric.mod.json', 'META-INF/mods.toml', 'META-INF/neoforge.mods.toml']) {
+        filesMatching(['fabric.mod.json', 'quilt.mod.json', 'META-INF/mods.toml', 'META-INF/neoforge.mods.toml']) {
             expand version: project.version
         }
     }
@@ -30,7 +30,7 @@ subprojects {
     }
 }
 tasks.register('collectJars', Copy) {
-    dependsOn ':fabric:build', ':neoforge:build', ':forge:build'
+    dependsOn ':fabric:build', ':quilt:build', ':neoforge:build', ':forge:build'
     from(subprojects.findAll { it.name != 'common' }.collect { it.layout.buildDirectory.dir('libs') }) {
         exclude '*-sources.jar'
     }

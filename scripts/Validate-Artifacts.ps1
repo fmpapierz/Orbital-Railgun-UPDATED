@@ -1,7 +1,7 @@
 param([string]$Directory = (Join-Path $PSScriptRoot '../build/libs'))
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.IO.Compression.FileSystem
-foreach ($loader in @('fabric', 'neoforge', 'forge')) {
+foreach ($loader in @('fabric', 'quilt', 'neoforge', 'forge')) {
     $files = @(Get-ChildItem -LiteralPath $Directory -Filter "orbital-railgun-$loader-*.jar" | Where-Object Name -NotLike '*-sources.jar')
     if ($files.Count -ne 1) { throw "Expected exactly one release jar for $loader" }
     $jar = $files[0]
@@ -14,7 +14,8 @@ foreach ($loader in @('fabric', 'neoforge', 'forge')) {
             'assets/orbital_railgun_enhanced/post_effect/strike.json',
             'data/orbital_railgun_enhanced/recipe/orbital_railgun.json')
         $required += switch ($loader) {
-            fabric { 'fabric.mod.json' }
+            fabric { 'fabric.mod.json'; 'io/github/kingironman2011/orbital_railgun_enhanced/fabric/FabricMod.class' }
+            quilt { 'fabric.mod.json'; 'io/github/kingironman2011/orbital_railgun_enhanced/quilt/QuiltMod.class' }
             neoforge { 'META-INF/neoforge.mods.toml' }
             forge { 'META-INF/mods.toml' }
         }

@@ -1,5 +1,9 @@
 # Validation matrix
 
+## 2.0.4 Quilt result
+
+Quilt Loader 0.31.0-beta.4 discovered the dedicated Quilt artifact alongside Fabric API 0.159.0+26.2 and initialized the railgun with `loader=Quilt`. The release build and artifact audit cover Fabric, Quilt, NeoForge, and Forge. Quilt relies on Quilt Loader's Fabric compatibility layer because Quilted Fabric API has no Minecraft 26.2 release.
+
 ## 2.0.3 targeting and camera shake results
 
 All three loaders passed integrated-world testing on September 8, 2026. Logs: `.porting/range-shake-final.log` (Fabric/NeoForge) and `.porting/range-shake-forge-final.log` (Forge).

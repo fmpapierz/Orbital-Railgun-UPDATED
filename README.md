@@ -8,9 +8,10 @@ Use **one** jar matching your loader, on the client and server. Minecraft **26.2
 
 | Loader | Tested version | Required additional mods | Jar in `build/libs/` |
 | --- | --- | --- | --- |
-| Fabric | 0.19.5 | Fabric API 0.159.0+26.2 | `orbital-railgun-fabric-2.0.3+26.2.jar` |
-| NeoForge | 26.2.0.82 | None | `orbital-railgun-neoforge-2.0.3+26.2.jar` |
-| Forge | 65.1.3 | None | `orbital-railgun-forge-2.0.3+26.2.jar` |
+| Fabric | 0.19.5 | Fabric API 0.159.0+26.2 | `orbital-railgun-fabric-2.0.4+26.2.jar` |
+| Quilt | 0.31.0-beta.4 | Fabric API 0.159.0+26.2 | `orbital-railgun-quilt-2.0.4+26.2.jar` |
+| NeoForge | 26.2.0.82 | None | `orbital-railgun-neoforge-2.0.4+26.2.jar` |
+| Forge | 65.1.3 | None | `orbital-railgun-forge-2.0.4+26.2.jar` |
 
 GeckoLib, owo-lib and Satin are **optional**. The mod uses Minecraft's item models, configuration screen, sound engine and post-processing API. Install compatible versions of those libraries if other mods need them. Do not install an old Minecraft version's library jar.
 
@@ -57,11 +58,11 @@ Set `JAVA_HOME` to a JDK 25 installation, then run:
 
 On this machine, the JDK is `C:\Program Files\Zulu\zulu-25`. The configured system `JAVA_HOME` may need overriding in the current shell.
 
-The `common` module owns gameplay, rendering, assets and tests. `fabric`, `neoforge`, and `forge` provide their loaders' registry and networking adapters. Each output jar contains the common code. `legacy/` preserves the previous port's sources for comparison; Gradle does not compile it.
+The `common` module owns gameplay, rendering, assets and tests. `fabric`, `quilt`, `neoforge`, and `forge` provide their loaders' registry and networking adapters. Each output jar contains the common code. The Quilt build uses Quilt Loader's Fabric compatibility layer and requires Fabric API. `legacy/` preserves the previous port's sources for comparison; Gradle does not compile it.
 
-Development clients: `./gradlew :fabric:runClient`, `:neoforge:runClient`, or `:forge:runClient`.
+Development clients: `./gradlew :fabric:runClient`, `:quilt:runClient`, `:neoforge:runClient`, or `:forge:runClient`.
 
-For an automated real-client test, run `./scripts/Smoke-Test.ps1`. It creates disposable flat worlds, fires a railgun, checks range exit/reentry, verifies bedrock removal and the crater boundary, captures screenshots, then exits. Leave its test client controls alone while it runs. `-Loader fabric`, `neoforge`, or `forge` limits the run. Smoke code is opt-in and release packaging rejects `-PsmokeTest`.
+For an automated real-client test, run `./scripts/Smoke-Test.ps1`. It creates disposable flat worlds, fires a railgun, checks range exit/reentry, verifies bedrock removal and the crater boundary, captures screenshots, then exits. Leave its test client controls alone while it runs. `-Loader fabric`, `quilt`, `neoforge`, or `forge` limits the run. Smoke code is opt-in and release packaging rejects `-PsmokeTest`.
 
 See [validation results](docs/VALIDATION.md) and [porting decisions](docs/PORTING.md).
 

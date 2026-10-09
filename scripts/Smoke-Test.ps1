@@ -1,9 +1,9 @@
-param([ValidateSet('all', 'fabric', 'neoforge', 'forge')][string]$Loader = 'all')
+param([ValidateSet('all', 'fabric', 'quilt', 'neoforge', 'forge')][string]$Loader = 'all')
 $ErrorActionPreference = 'Stop'
 $root = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 Push-Location $root
 try {
-    $loaders = if ($Loader -eq 'all') { @('fabric', 'neoforge', 'forge') } else { @($Loader) }
+    $loaders = if ($Loader -eq 'all') { @('fabric', 'quilt', 'neoforge', 'forge') } else { @($Loader) }
     $logDir = New-Item -ItemType Directory -Path 'build/validation' -Force
     foreach ($name in $loaders) {
         $log = Join-Path $logDir.FullName "$name-client.txt"

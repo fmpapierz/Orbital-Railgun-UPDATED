@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "orbital_railgun_enhanced",
+  "version": "${version}",
+  "name": "Orbital Railgun Enhanced",
+  "description": "Orbital Railgun with enhanced effects, sounds and controls, for Minecraft 26.2.",
+  "authors": [
+    "Mishkis",
+    "KingIronMan2011"
+  ],
+  "license": "MIT",
+  "icon": "assets/orbital_railgun_enhanced/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.kingironman2011.orbital_railgun_enhanced.quilt.QuiltMod"
+    ],
+    "client": [
+      "io.github.kingironman2011.orbital_railgun_enhanced.quilt.QuiltClient"
+    ]
+  },
+  "mixins": [
+    "orbital_railgun_enhanced.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "fabric-api-base": "*",
+    "fabric-creative-tab-api-v1": "*",
+    "fabric-networking-api-v1": "*",
+    "fabric-registry-sync-v0": "*",
+    "minecraft": "26.2",
+    "java": ">=25"
+  }
+}
